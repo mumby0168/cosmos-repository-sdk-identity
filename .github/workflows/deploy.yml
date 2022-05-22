@@ -40,6 +40,7 @@ jobs:
         with:
           inlineScript: >
             echo "Creating resources"
+            az deployment group create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --template-file './bicep/main.bicep' --what-if
             az deployment group create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --template-file './bicep/main.bicep'
 
   build:
