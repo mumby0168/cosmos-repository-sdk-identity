@@ -21,7 +21,7 @@ module acaEnv 'aca_env.bicep' = {
 module api 'api.bicep' = {
   name: 'api'
   params: {
-    name: '${resourceGroup().name}-app'
+    name: 'books-api'
     location: location
     containerAppEnvironmentId: acaEnv.outputs.id
     registry: acr.name
