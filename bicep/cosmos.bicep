@@ -34,7 +34,7 @@ resource db 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2021-06-15' = {
 
 resource booksContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2021-06-15' = {
   parent: db
-  name: 'books-container'
+  name: 'books'
   properties: {
     resource: {
       id: 'books'
