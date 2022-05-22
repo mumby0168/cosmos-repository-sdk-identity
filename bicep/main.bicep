@@ -32,7 +32,7 @@ module api 'api.bicep' = {
     registry: acr.name
     registryUsername: acr.listCredentials().username
     registryPassword: acr.listCredentials().passwords[0].value
-    midId: booksApiMid.id
+    midName: booksApiMid.name
     envVars: [
       {
         name: 'ASPNETCORE_ENVIRONMENT'

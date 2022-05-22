@@ -10,7 +10,7 @@ param minReplicas int = 1
 param maxReplicas int = 1
 @secure()
 param registryPassword string
-param midId string
+param midName string
 
 resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' ={
   name: name
@@ -18,7 +18,7 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' ={
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
-      '${midId}': {}
+      'subscriptions/${subscription().id}/resourceGroups/${resourceGroup().name}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${midName}': {}
     }  
   }
   properties:{
