@@ -11,6 +11,11 @@ resource acr 'Microsoft.ContainerRegistry/registries@2021-09-01' = {
   }
 }
 
+resource booksApiMid 'Microsoft.ManagedIdentity/userAssignedIdentities@2021-09-30-preview' = {
+  name: 'books-api-mid'
+  location: location
+}
+
 module acaEnv 'aca_env.bicep' = {
   name: 'env'
   params: {
@@ -27,6 +32,7 @@ module api 'api.bicep' = {
     registry: acr.name
     registryUsername: acr.listCredentials().username
     registryPassword: acr.listCredentials().passwords[0].value
+    midId: booksApiMid.properties.principalId
     envVars: [
       {
         name: 'ASPNETCORE_ENVIRONMENT'
@@ -68,7 +74,7 @@ module cosmosPerms 'cosmos_app_perms.bicep' = {
   params: {
     accountId: cosmos.outputs.accountId
     accountName: cosmos.outputs.accountName
-    appPrincipalId: api.outputs.principalId
+    appPrincipalId: booksApiMid.properties.principalId
   }
 }
 
