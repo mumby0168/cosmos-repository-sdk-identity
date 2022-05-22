@@ -18,7 +18,7 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' ={
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
-      'subscriptions/${subscription().id}/resourceGroups/${resourceGroup().name}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${midName}': {}
+      '${subscription().id}/resourceGroups/${resourceGroup().name}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${midName}': {}
     }  
   }
   properties:{
