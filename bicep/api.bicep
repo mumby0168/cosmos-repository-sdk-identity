@@ -10,12 +10,16 @@ param minReplicas int = 1
 param maxReplicas int = 1
 @secure()
 param registryPassword string
+param midId string
 
 resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' ={
   name: name
   location: location
   identity: {
-    type: 'SystemAssigned'
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${midId}': {}
+    }  
   }
   properties:{
     managedEnvironmentId: containerAppEnvironmentId
