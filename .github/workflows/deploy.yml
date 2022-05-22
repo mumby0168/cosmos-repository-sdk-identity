@@ -1,4 +1,4 @@
-name: Deploy Cosmos App to ACA
+name: Deploy Cosmos App to ACA (Identity)
 
 on:
   push:
