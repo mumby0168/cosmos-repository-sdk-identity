@@ -6,7 +6,7 @@ param appPrincipalId string
 var roleDefinitionId = guid('sql-role-definition-', appPrincipalId, accountId)
 var roleAssignmentId = guid(roleDefinitionId, appPrincipalId, accountId)
 
-resource sqlRoleDefinition 'Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions@2021-04-15' = {
+resource sqlRoleDefinition 'Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions@2022-02-15-preview' = {
   name: '${accountName}/${roleDefinitionId}'
   properties: {
     roleName: roleDefinitionName
@@ -25,7 +25,7 @@ resource sqlRoleDefinition 'Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinit
   }
 }
 
-resource sqlRoleAssignment 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2021-04-15' = {
+resource sqlRoleAssignment 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2022-02-15-preview' = {
   name: '${accountName}/${roleAssignmentId}'
   properties: {
     roleDefinitionId: sqlRoleDefinition.id
