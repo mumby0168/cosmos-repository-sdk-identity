@@ -71,3 +71,6 @@ module cosmosPerms 'cosmos_app_perms.bicep' = {
     appPrincipalId: api.outputs.principalId
   }
 }
+
+
+output acrLoginServer string = acr.properties.loginServer
