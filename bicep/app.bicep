@@ -6,7 +6,7 @@ resource booksApiMid 'Microsoft.ManagedIdentity/userAssignedIdentities@2021-09-3
 }
 
 resource acr 'Microsoft.ContainerRegistry/registries@2021-09-01' existing = {
-  name: toLower('${resourceGroup().name}2423423acr')
+  name: toLower('cosmossdkidentitydemoacr')
 }
 
 resource acaEnv 'Microsoft.App/managedEnvironments@2022-01-01-preview' existing = {

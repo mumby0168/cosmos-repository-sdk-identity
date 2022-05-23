@@ -1,7 +1,7 @@
 param location string = resourceGroup().location
 
 resource acr 'Microsoft.ContainerRegistry/registries@2021-09-01' = {
-  name: toLower('${resourceGroup().name}2423423acr')
+  name: toLower('cosmossdkidentitydemoacr')
   location: location
   sku: {
     name: 'Basic'
