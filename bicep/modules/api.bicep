@@ -11,6 +11,7 @@ param maxReplicas int = 1
 @secure()
 param registryPassword string
 param midName string
+param image string
 
 resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' ={
   name: name
@@ -45,7 +46,7 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' ={
     template: {
       containers: [
         {
-          image: repositoryImage
+          image: image
           name: name
           env: envVars
         }

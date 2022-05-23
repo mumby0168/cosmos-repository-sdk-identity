@@ -1,13 +1,12 @@
 using Azure.Identity;
 using Bogus;
 using Microsoft.Azure.CosmosRepository;
-using Microsoft.Azure.CosmosRepository.Options;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCosmosRepository(options =>
 {
+    options.AccountEndpoint = "https://cosmos-repository-sdk-identity-cosmos.documents.azure.com:443/";
     options.TokenCredential = new DefaultAzureCredential();
     options.ContainerBuilder.Configure<Book>(optionsBuilder => optionsBuilder
         .WithContainer("books")
