@@ -60,11 +60,12 @@ module api 'api.bicep' = {
       }
       {
         name: 'AZURE_CLIENT_ID'
-        value: booksApiMid.properties.principalId
+        value: booksApiMid.properties.clientId
       }
     ]
   }
 }
+
 
 module cosmos 'cosmos.bicep' = {
   name: 'cosmos'
