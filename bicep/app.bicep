@@ -51,7 +51,7 @@ module api 'modules/api.bicep' = {
       }
       {
         name: 'RepositoryOptions__DatabaseId'
-        value: 'books'
+        value: 'managed-id-db'
       }
       {
         name: 'RepositoryOptions__IsAutoResourceCreationIfNotExistsEnabled'
