@@ -94,6 +94,12 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AzureSPN }}
+      
+      - name: Get ACR Login Server
+        run: |
+          # Retrieve ACR Login Server value from deployment output
+          ACR_LOGIN_SERVER=$(az deployment group show -g ${{ env.RESOURCE_GROUP_NAME }} -n main --query properties.outputs.acrLoginServer.value | tr -d '"')
+          echo "ACR_LOGIN_SERVER=$ACR_LOGIN_SERVER" >> $GITHUB_ENV
 
       - name: Deploy API
         uses: azure/CLI@v1
