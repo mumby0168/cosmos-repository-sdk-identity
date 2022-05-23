@@ -58,6 +58,10 @@ module api 'api.bicep' = {
         name: 'RepositoryOptions__IsAutoResourceCreationIfNotExistsEnabled'
         value: 'False'
       }
+      {
+        name: 'AZURE_CLIENT_ID'
+        value: booksApiMid.properties.principalId
+      }
     ]
   }
 }
