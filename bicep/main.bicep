@@ -66,14 +66,6 @@ module cosmos 'cosmos.bicep' = {
   name: 'cosmos'
   params: {
     location: location
-  }
-}
-
-module cosmosPerms 'cosmos_app_perms.bicep' = {
-  name: 'permissions'
-  params: {
-    accountId: cosmos.outputs.accountId
-    accountName: cosmos.outputs.accountName
     appPrincipalId: booksApiMid.properties.principalId
   }
 }

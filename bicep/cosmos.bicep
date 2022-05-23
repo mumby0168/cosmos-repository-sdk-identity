@@ -2,8 +2,10 @@ param baseName string = resourceGroup().name
 param location string = resourceGroup().location
 param dbId string = 'managed-id-db'
 param pk string = '/partitionKey'
+param roleDefinitionName string = 'Cosmos Application Role'
+param appPrincipalId string
 
-resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2021-03-15' = {
+resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-03-15' = {
   name: '${baseName}-cosmos'
   location: location
   kind: 'GlobalDocumentDB'
@@ -24,7 +26,7 @@ resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2021-03-15' = {
 }
 
 resource db 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2021-06-15' = {
-  name: '${cosmos.name}/${dbId}'
+  name: '${cosmosAccount.name}/${dbId}'
   properties: {
     resource: {
       id: dbId
@@ -48,7 +50,40 @@ resource booksContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/cont
   }
 }
 
-output accountId string = cosmos.id
-output accountName string = cosmos.name
+
+// Permissions for MID
+
+var roleDefinitionId = guid('sql-role-definition-', appPrincipalId, cosmosAccount.id)
+var roleAssignmentId = guid(roleDefinitionId, appPrincipalId, cosmosAccount.id)
+
+resource sqlRoleDefinition 'Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions@2021-04-15' = {
+  name: '${cosmosAccount.name}/${roleDefinitionId}'
+  properties: {
+    roleName: roleDefinitionName
+    type: 'CustomRole'
+    assignableScopes: [
+      cosmosAccount.id
+    ]
+    permissions: [
+      {
+        dataActions: [
+          'Microsoft.DocumentDB/databaseAccounts/readMetadata'
+          'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/items/*'
+        ]
+      }
+    ]
+  }
+}
+
+resource sqlRoleAssignment 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2021-04-15' = {
+  name: '${cosmosAccount.name}/${roleAssignmentId}'
+  properties: {
+    roleDefinitionId: sqlRoleDefinition.id
+    principalId: appPrincipalId
+    scope: cosmosAccount.id
+  }
+}
+
+
 output databaseId string = dbId
-output cosmosDns string = cosmos.properties.documentEndpoint
+output cosmosDns string = cosmosAccount.properties.documentEndpoint
