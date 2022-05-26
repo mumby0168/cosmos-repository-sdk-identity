@@ -1,4 +1,5 @@
 param location string = resourceGroup().location
+param servicePrincipalId string
 
 resource acr 'Microsoft.ContainerRegistry/registries@2021-09-01' = {
   name: toLower('cosmossdkidentitydemoacr')
@@ -15,6 +16,45 @@ resource booksApiMid 'Microsoft.ManagedIdentity/userAssignedIdentities@2021-09-3
   name: 'books-api-mid'
   location: location
 }
+
+resource kv 'Microsoft.KeyVault/vaults@2019-09-01' = {
+  name: '${resourceGroup().name}-kv'
+  location: location
+  properties: {
+    enabledForDeployment: true
+    enabledForTemplateDeployment: true
+    enabledForDiskEncryption: true
+    tenantId: 'tenantId'
+    accessPolicies: [
+      {
+        tenantId: subscription().tenantId
+        objectId: servicePrincipalId
+        permissions: {
+          keys: [
+            'get'
+          ]
+          secrets: [
+            'list'
+            'get'
+          ]
+        }
+      }
+    ]
+    sku: {
+      name: 'standard'
+      family: 'A'
+    }
+  }
+}
+
+resource keyVaultSecret 'Microsoft.KeyVault/vaults/secrets@2019-09-01' = {
+  name: 'acr_password'
+  parent: kv
+  properties: {
+    value: 'value'
+  }
+}
+
 
 module acaEnv 'modules/aca_env.bicep' = {
   name: 'env'

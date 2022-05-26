@@ -40,8 +40,12 @@ jobs:
         with:
           inlineScript: >
             echo "Creating resources"
+
+            SP_ID=$(az ad signed-in-user show --query objectId -o tsv)
+
+            echo $SP_ID
             
-            az deployment group create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --template-file './bicep/main.bicep'
+            az deployment group create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --template-file './bicep/main.bicep' --parameters servicePrincipalId=$SP_ID
 
   build:
     runs-on: ubuntu-latest

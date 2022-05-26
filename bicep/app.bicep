@@ -21,6 +21,10 @@ resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2021-03-15' existing = {
   name: '${resourceGroup().name}-cosmos'
 }
 
+resource kv 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
+  name: '${resourceGroup().name}-kv'
+}
+
 module api 'modules/api.bicep' = {
   name: 'api'
   params: {
@@ -30,7 +34,7 @@ module api 'modules/api.bicep' = {
     containerAppEnvironmentId: acaEnv.id
     registry: acr.name
     registryUsername: acr.listCredentials().username
-    registryPassword: acr.listCredentials().passwords[0].value
+    registryPassword: kv.getSecret('acr_password')
     midName: booksApiMid.name
     envVars: [
       {
