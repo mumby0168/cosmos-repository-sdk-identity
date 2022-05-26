@@ -7,6 +7,7 @@ on:
 
 env:
   RESOURCE_GROUP_NAME: cosmos-repository-sdk-identity
+  SP_ID: 5ebdc9f5-8218-4276-b948-4338e7178d6c
 
   REGION:	westeurope
 
@@ -40,12 +41,8 @@ jobs:
         with:
           inlineScript: >
             echo "Creating resources"
-
-            SP_ID=$(az ad signed-in-user show --query objectId -o tsv)
-
-            echo $SP_ID
             
-            az deployment group create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --template-file './bicep/main.bicep' --parameters servicePrincipalId=$SP_ID
+            az deployment group create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --template-file './bicep/main.bicep' --parameters servicePrincipalId=${{ env.SP_ID }}
 
   build:
     runs-on: ubuntu-latest
