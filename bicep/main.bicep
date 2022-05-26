@@ -18,7 +18,7 @@ resource booksApiMid 'Microsoft.ManagedIdentity/userAssignedIdentities@2021-09-3
 }
 
 resource kv 'Microsoft.KeyVault/vaults@2019-09-01' = {
-  name: '${resourceGroup().name}-kv'
+  name: '${replace(resourceGroup().name, '-', '')}kv'
   location: location
   properties: {
     enabledForDeployment: true

@@ -7,7 +7,7 @@ on:
 
 env:
   RESOURCE_GROUP_NAME: cosmos-repository-sdk-identity
-  SP_ID: 5ebdc9f5-8218-4276-b948-4338e7178d6c
+  SP_ID: 8b67a14f-09d7-4d8c-b8e8-5fec2b4bec07
 
   REGION:	westeurope
 
