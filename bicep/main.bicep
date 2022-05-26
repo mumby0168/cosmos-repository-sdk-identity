@@ -21,6 +21,9 @@ resource kv 'Microsoft.KeyVault/vaults@2019-09-01' = {
   name: 'cosmosidentitykv'
   location: location
   properties: {
+    enabledForDeployment: false
+    enabledForTemplateDeployment: true
+    enabledForDiskEncryption: false
     tenantId: subscription().tenantId
     accessPolicies: []
     sku: {
