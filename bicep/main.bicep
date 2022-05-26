@@ -21,9 +21,6 @@ resource kv 'Microsoft.KeyVault/vaults@2019-09-01' = {
   name: 'cosmosidentitykv'
   location: location
   properties: {
-    enabledForDeployment: true
-    enabledForTemplateDeployment: true
-    enabledForDiskEncryption: true
     tenantId: subscription().tenantId
     accessPolicies: []
     sku: {
@@ -37,7 +34,7 @@ resource keyVaultSecret 'Microsoft.KeyVault/vaults/secrets@2019-09-01' = {
   name: 'acr_password'
   parent: kv
   properties: {
-    value: 'value'
+    value: acr.listCredentials().passwords[0].value
   }
 }
 
