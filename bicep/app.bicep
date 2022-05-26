@@ -22,7 +22,7 @@ resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2021-03-15' existing = {
 }
 
 resource kv 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
-  name: '${replace(resourceGroup().name, '-', '')}kv'
+  name: 'cosmosidentitydemokv'
 }
 
 module api 'modules/api.bicep' = {
