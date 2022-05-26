@@ -18,28 +18,14 @@ resource booksApiMid 'Microsoft.ManagedIdentity/userAssignedIdentities@2021-09-3
 }
 
 resource kv 'Microsoft.KeyVault/vaults@2019-09-01' = {
-  name: 'cosmosidentitydemokv'
+  name: 'cosmosidentitykv'
   location: location
   properties: {
     enabledForDeployment: true
     enabledForTemplateDeployment: true
     enabledForDiskEncryption: true
-    tenantId: 'tenantId'
-    accessPolicies: [
-      {
-        tenantId: subscription().tenantId
-        objectId: servicePrincipalId
-        permissions: {
-          keys: [
-            'get'
-          ]
-          secrets: [
-            'list'
-            'get'
-          ]
-        }
-      }
-    ]
+    tenantId: subscription().tenantId
+    accessPolicies: []
     sku: {
       name: 'standard'
       family: 'A'
