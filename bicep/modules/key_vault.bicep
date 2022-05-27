@@ -20,10 +20,10 @@ resource kv 'Microsoft.KeyVault/vaults@2021-10-01' = {
   }
 }
 
-resource keyVaultSecret 'Microsoft.KeyVault/vaults/secrets@2021-10-01' = {
-  name: 'acr_password'
-  parent: kv
-  properties: {
-    value: acrPassword
-  }
-}
+// resource keyVaultSecret 'Microsoft.KeyVault/vaults/secrets@2021-10-01' = {
+//   name: 'acr_password'
+//   parent: kv
+//   properties: {
+//     value: acrPassword
+//   }
+// }
