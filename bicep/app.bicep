@@ -34,7 +34,7 @@ module api 'modules/api.bicep' = {
     containerAppEnvironmentId: acaEnv.id
     registry: acr.name
     registryUsername: acr.listCredentials().username
-    registryPassword: kv.getSecret('acr_password')
+    registryPassword: kv.getSecret('acr-password')
     midName: booksApiMid.name
     envVars: [
       {
