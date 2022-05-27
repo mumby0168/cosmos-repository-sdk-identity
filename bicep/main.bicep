@@ -18,7 +18,7 @@ resource booksApiMid 'Microsoft.ManagedIdentity/userAssignedIdentities@2021-09-3
 }
 
 module keyVault 'modules/key_vault.bicep' = {
-  name: 'key vault'
+  name: 'key-vault'
   params: {
     location: location
     acrPassword: acr.listCredentials().passwords[0].value
