@@ -1,5 +1,6 @@
 param location string = resourceGroup().location
-param image string
+param imageTag string
+param serviceName string
 
 resource booksApiMid 'Microsoft.ManagedIdentity/userAssignedIdentities@2021-09-30-preview' existing = {
   name: 'books-api-mid'
@@ -28,7 +29,7 @@ resource kv 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
 module api 'modules/api.bicep' = {
   name: 'api'
   params: {
-    image: image
+    image: '${acr.name}.azurecr.io/${serviceName}:${imageTag}'
     name: 'books-api'
     location: location
     containerAppEnvironmentId: acaEnv.id
