@@ -12,7 +12,7 @@ env:
   REGION:	westeurope
 
   DOCKER_FILE_PATH: src/CosmosRepositorySdkManagedIdentityApi/Dockerfile
-  IMAGE_NAME: books-api
+  IMAGE_NAME: apps/books-api
 
 jobs:
   core-infra:

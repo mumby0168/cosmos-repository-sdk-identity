@@ -46,7 +46,7 @@ resource containerApp 'Microsoft.App/containerApps@2022-03-01' ={
     template: {
       containers: [
         {
-          image: 'cosmossdkidentitydemoacr.azurecr.io/books-api:6b8743beace588f70b660ebfa3af66f8d0f8d1bd'
+          image: image
           name: name
           env: envVars
         }
