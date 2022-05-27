@@ -108,7 +108,7 @@ jobs:
           inlineScript: >
             echo "Deploying API"
 
-            az deployment group create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --template-file './bicep/app.bicep' --parameters imageTag=${{github.sha}} serviceName=${{ env.IMAGE_NAME }}
+            az deployment group create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --template-file './bicep/app.bicep' --parameters imageTag='${{github.sha}}' serviceName='${{ env.IMAGE_NAME }}'
 
       - name: logout
         run: >

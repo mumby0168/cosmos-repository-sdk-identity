@@ -15,12 +15,12 @@ param image string
 resource containerApp 'Microsoft.App/containerApps@2022-03-01' ={
   name: name
   location: location
-  // identity: {
-  //   type: 'UserAssigned'
-  //   userAssignedIdentities: {
-  //     '${subscription().id}/resourceGroups/${resourceGroup().name}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${midName}': {}
-  //   }  
-  // }
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${subscription().id}/resourceGroups/${resourceGroup().name}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${midName}': {}
+    }  
+  }
   properties:{
     managedEnvironmentId: containerAppEnvironmentId
     configuration: {
