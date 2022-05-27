@@ -17,28 +17,11 @@ resource booksApiMid 'Microsoft.ManagedIdentity/userAssignedIdentities@2021-09-3
   location: location
 }
 
-resource kv 'Microsoft.KeyVault/vaults@2019-09-01' = {
-  name: 'cosmosidentitydemokv'
-  location: location
-  properties: {
-    enabledForDeployment: false
-    enabledForTemplateDeployment: true
-    enabledForDiskEncryption: false
-    tenantId: subscription().tenantId
-    accessPolicies: []
-    sku: {
-      name: 'standard'
-      family: 'A'
-    }
-    enableSoftDelete: false
-  }
-}
-
-resource keyVaultSecret 'Microsoft.KeyVault/vaults/secrets@2019-09-01' = {
-  name: 'acr_password'
-  parent: kv
-  properties: {
-    value: acr.listCredentials().passwords[0].value
+module keyVault 'modules/key_vault.bicep' = {
+  name: 'key vault'
+  params: {
+    location: location
+    acrPassword: acr.listCredentials().passwords[0].value
   }
 }
 
