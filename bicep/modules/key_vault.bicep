@@ -1,6 +1,4 @@
 param location string =  resourceGroup().location
-
-@secure()
 param acrPassword string
 
 resource kv 'Microsoft.KeyVault/vaults@2021-10-01' = {
