@@ -108,8 +108,6 @@ jobs:
           inlineScript: >
             echo "Deploying API"
 
-            az acr login -n cosmossdkidentitydemoacr
-
             az deployment group create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --template-file './bicep/app.bicep' --parameters imageTag='${{github.sha}}' serviceName='${{ env.IMAGE_NAME }}'
 
       - name: logout
