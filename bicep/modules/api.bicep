@@ -24,6 +24,7 @@ resource containerApp 'Microsoft.App/containerApps@2022-03-01' ={
   properties:{
     managedEnvironmentId: containerAppEnvironmentId
     configuration: {
+      activeRevisionsMode: 'single'
       secrets: [
         {
           name: 'container-registry-password'
@@ -45,7 +46,7 @@ resource containerApp 'Microsoft.App/containerApps@2022-03-01' ={
     template: {
       containers: [
         {
-          image: image
+          image: 'cosmossdkidentitydemoacr.azurecr.io/books-api:6b8743beace588f70b660ebfa3af66f8d0f8d1bd'
           name: name
           env: envVars
         }
