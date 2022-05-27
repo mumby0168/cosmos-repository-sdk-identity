@@ -18,7 +18,7 @@ resource booksApiMid 'Microsoft.ManagedIdentity/userAssignedIdentities@2021-09-3
 }
 
 resource kv 'Microsoft.KeyVault/vaults@2019-09-01' = {
-  name: 'cosmosidentitykv'
+  name: 'cosmosidentitydemokv'
   location: location
   properties: {
     enabledForDeployment: false
