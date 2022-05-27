@@ -1,5 +1,4 @@
 param location string = resourceGroup().location
-param servicePrincipalId string
 
 resource acr 'Microsoft.ContainerRegistry/registries@2021-09-01' = {
   name: toLower('cosmossdkidentitydemoacr')
