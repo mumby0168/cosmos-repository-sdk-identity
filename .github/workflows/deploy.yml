@@ -7,14 +7,15 @@ on:
 
 env:
   RESOURCE_GROUP_NAME: cosmos-repository-sdk-identity
+  SP_ID: 8b67a14f-09d7-4d8c-b8e8-5fec2b4bec07
 
   REGION:	westeurope
 
   DOCKER_FILE_PATH: src/CosmosRepositorySdkManagedIdentityApi/Dockerfile
-  IMAGE_NAME: silo
+  IMAGE_NAME: apps/books-api
 
 jobs:
-  provision:
+  core-infra:
     runs-on: ubuntu-latest
 
     steps:
@@ -40,13 +41,12 @@ jobs:
         with:
           inlineScript: >
             echo "Creating resources"
-            echo "Executing az deployment group create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --template-file '/github/workspace/Azure/main.bicep' --debug"
-
-            az deployment group create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --template-file './bicep/main.bicep' --debug
+            
+            az deployment group create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --template-file './bicep/main.bicep' --parameters servicePrincipalId=${{ env.SP_ID }}
 
   build:
     runs-on: ubuntu-latest
-    needs: provision
+    needs: core-infra
 
     steps:
       - name: Checkout to the branch
@@ -95,32 +95,20 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AzureSPN }}
-
-      - name: Installing Container Apps extension
-        uses: azure/CLI@v1
-        with:
-          inlineScript: >
-            echo "Installing containerapp extension"
-
-            az config set extension.use_dynamic_install=yes_without_prompt
-
-            az extension add --name containerapp --yes
-
+      
       - name: Get ACR Login Server
         run: |
           # Retrieve ACR Login Server value from deployment output
           ACR_LOGIN_SERVER=$(az deployment group show -g ${{ env.RESOURCE_GROUP_NAME }} -n main --query properties.outputs.acrLoginServer.value | tr -d '"')
           echo "ACR_LOGIN_SERVER=$ACR_LOGIN_SERVER" >> $GITHUB_ENV
 
-      - name: Deploy Silo
+      - name: Deploy API
         uses: azure/CLI@v1
         with:
           inlineScript: >
-            echo "Deploying App"
+            echo "Deploying API"
 
-            az containerapp registry set -n silo -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.ACR_LOGIN_SERVER }}
-
-            az containerapp update -n silo -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            az deployment group create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --template-file './bicep/app.bicep' --parameters imageTag='${{github.sha}}' serviceName='${{ env.IMAGE_NAME }}'
 
       - name: logout
         run: >

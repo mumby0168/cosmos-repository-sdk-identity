@@ -1,7 +1,6 @@
 param name string
 param location string = resourceGroup().location
 param containerAppEnvironmentId string
-param repositoryImage string = 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
 param envVars array = []
 param targetIngressPort int = 80
 param registry string
@@ -10,16 +9,22 @@ param minReplicas int = 1
 param maxReplicas int = 1
 @secure()
 param registryPassword string
+param midName string
+param image string
 
 resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' ={
   name: name
   location: location
   identity: {
-    type: 'SystemAssigned'
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${subscription().id}/resourceGroups/${resourceGroup().name}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${midName}': {}
+    }  
   }
   properties:{
     managedEnvironmentId: containerAppEnvironmentId
     configuration: {
+      activeRevisionsMode: 'single'
       secrets: [
         {
           name: 'container-registry-password'
@@ -41,7 +46,7 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' ={
     template: {
       containers: [
         {
-          image: repositoryImage
+          image: image
           name: name
           env: envVars
         }
@@ -54,5 +59,4 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' ={
   }
 }
 
-output principalId string = containerApp.identity.principalId
 output fqdn string = containerApp.properties.configuration.ingress.fqdn

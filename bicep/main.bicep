@@ -1,7 +1,8 @@
 param location string = resourceGroup().location
+param servicePrincipalId string
 
 resource acr 'Microsoft.ContainerRegistry/registries@2021-09-01' = {
-  name: toLower('${uniqueString(resourceGroup().name)}acr')
+  name: toLower('cosmossdkidentitydemoacr')
   location: location
   sku: {
     name: 'Basic'
@@ -11,63 +12,33 @@ resource acr 'Microsoft.ContainerRegistry/registries@2021-09-01' = {
   }
 }
 
-module acaEnv 'aca_env.bicep' = {
+resource booksApiMid 'Microsoft.ManagedIdentity/userAssignedIdentities@2021-09-30-preview' = {
+  name: 'books-api-mid'
+  location: location
+}
+
+module keyVault 'modules/key_vault.bicep' = {
+  name: 'key-vault'
+  params: {
+    location: location
+    acrPassword: acr.listCredentials().passwords[0].value
+  }
+}
+
+
+module acaEnv 'modules/aca_env.bicep' = {
   name: 'env'
   params: {
     location: location
   }
 }
 
-module api 'api.bicep' = {
-  name: 'api'
-  params: {
-    name: '${resourceGroup().name}-app'
-    location: location
-    containerAppEnvironmentId: acaEnv.outputs.id
-    registry: acr.name
-    registryUsername: acr.listCredentials().username
-    registryPassword: acr.listCredentials().passwords[0].value
-    envVars: [
-      {
-        name: 'ASPNETCORE_ENVIRONMENT'
-        value: 'Development'
-      }
-      {
-        name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-        value: acaEnv.outputs.appInsightsInstrumentationKey
-      }
-      {
-        name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-        value: acaEnv.outputs.appInsightsConnectionString
-      }
-      {
-        name: 'RepositoryOptions__AccountEndpoint'
-        value: cosmos.outputs.cosmosDns
-      }
-      {
-        name: 'RepositoryOptions__DatabaseId'
-        value: cosmos.outputs.databaseId
-      }
-      {
-        name: 'RepositoryOptions__IsAutoResourceCreationIfNotExistsEnabled'
-        value: 'False'
-      }
-    ]
-  }
-}
-
-module cosmos 'cosmos.bicep' = {
+module cosmos 'modules/cosmos.bicep' = {
   name: 'cosmos'
   params: {
     location: location
+    appPrincipalId: booksApiMid.properties.principalId
   }
 }
 
-module cosmosPerms 'cosmos_app_perms.bicep' = {
-  name: 'permissions'
-  params: {
-    accountId: cosmos.outputs.accountId
-    accountName: cosmos.outputs.accountName
-    appPrincipalId: api.outputs.principalId
-  }
-}
+output acrLoginServer string = acr.properties.loginServer
