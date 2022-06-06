@@ -29,15 +29,6 @@ resource booksApiAcrPullRoleAssignment 'Microsoft.Authorization/roleAssignments@
 }
 
 
-module keyVault 'modules/key_vault.bicep' = {
-  name: 'key-vault'
-  params: {
-    location: location
-    acrPassword: acr.listCredentials().passwords[0].value
-  }
-}
-
-
 module acaEnv 'modules/aca_env.bicep' = {
   name: 'env'
   params: {
