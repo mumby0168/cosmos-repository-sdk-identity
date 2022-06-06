@@ -1,14 +1,11 @@
 param location string = resourceGroup().location
-param servicePrincipalId string
+param acrPullRoleId string = '7f951dda-4ed3-4680-a7ca-43fe172d538d'
 
 resource acr 'Microsoft.ContainerRegistry/registries@2021-09-01' = {
   name: toLower('cosmossdkidentitydemoacr')
   location: location
   sku: {
     name: 'Basic'
-  }
-  properties: {
-    adminUserEnabled: true
   }
 }
 
@@ -17,11 +14,17 @@ resource booksApiMid 'Microsoft.ManagedIdentity/userAssignedIdentities@2021-09-3
   location: location
 }
 
-module keyVault 'modules/key_vault.bicep' = {
-  name: 'key-vault'
-  params: {
-    location: location
-    acrPassword: acr.listCredentials().passwords[0].value
+var booksApiAcrPull = {
+  name: guid(booksApiMid.id, resourceGroup().id, acrPullRoleId)
+  roleDefinitionId: acrPullRoleId
+}
+
+resource booksApiAcrPullRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-10-01-preview' = {
+  name: booksApiAcrPull.name
+  scope: acr
+  properties: {
+    principalId: booksApiMid.properties.principalId
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', booksApiAcrPull.roleDefinitionId)
   }
 }
 
