@@ -4,11 +4,8 @@ param containerAppEnvironmentId string
 param envVars array = []
 param targetIngressPort int = 80
 param registry string
-param registryUsername string
 param minReplicas int = 1
 param maxReplicas int = 1
-@secure()
-param registryPassword string
 param midName string
 param image string
 
@@ -24,13 +21,7 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' ={
   properties:{
     managedEnvironmentId: containerAppEnvironmentId
     configuration: {
-      activeRevisionsMode: 'single'
-      secrets: [
-        {
-          name: 'container-registry-password'
-          value: registryPassword
-        }
-      ]      
+      activeRevisionsMode: 'single'    
       registries: [
         {
           server: registry
