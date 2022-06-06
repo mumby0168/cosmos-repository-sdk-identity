@@ -34,8 +34,6 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' ={
       registries: [
         {
           server: registry
-          username: registryUsername
-          passwordSecretRef: 'container-registry-password'
         }
       ]
       ingress: {
