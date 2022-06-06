@@ -8,8 +8,9 @@ param minReplicas int = 1
 param maxReplicas int = 1
 param midName string
 param image string
+param midResourceId string
 
-resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' ={
+resource containerApp 'Microsoft.App/containerApps@2022-03-01' ={
   name: name
   location: location
   identity: {
@@ -25,6 +26,7 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' ={
       registries: [
         {
           server: registry
+          identity: midResourceId
         }
       ]
       ingress: {

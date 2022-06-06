@@ -31,6 +31,7 @@ module api 'modules/api.bicep' = {
     containerAppEnvironmentId: acaEnv.id
     registry: acr.name
     midName: booksApiMid.name
+    midResourceId: booksApiMid.id
     envVars: [
       {
         name: 'ASPNETCORE_ENVIRONMENT'
