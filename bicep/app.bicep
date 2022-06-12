@@ -11,7 +11,7 @@ resource acr 'Microsoft.ContainerRegistry/registries@2021-09-01' existing = {
 }
 
 resource acaEnv 'Microsoft.App/managedEnvironments@2022-01-01-preview' existing = {
-  name: '${resourceGroup().name}env'
+  name: '${resourceGroup().name}-env'
 }
 
 resource ai 'Microsoft.Insights/components@2020-02-02' existing = {
@@ -29,7 +29,7 @@ module api 'modules/api.bicep' = {
     name: 'books-api'
     location: location
     containerAppEnvironmentId: acaEnv.id
-    registry: acr.name
+    registry: '${acr.name}.azure.io'
     midName: booksApiMid.name
     midResourceId: booksApiMid.id
     envVars: [

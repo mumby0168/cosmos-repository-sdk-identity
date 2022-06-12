@@ -1,9 +1,13 @@
 name: Deploy Cosmos App to ACA (Identity)
 
 on:
-  push:
-    branches:
-      - deploy
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'The reason for running the workflow'
+        required: true
+        default: 'Manual run'
+
 
 env:
   RESOURCE_GROUP_NAME: cosmos-repository-sdk-identity
