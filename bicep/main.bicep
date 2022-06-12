@@ -51,7 +51,7 @@ module api 'modules/api.bicep' = {
     name: 'books-api'
     location: location
     containerAppEnvironmentId: acaEnv.outputs.id
-    registry: '${acr.name}.azure.io'
+    registry: acr.name
     midName: booksApiMid.name
     midResourceId: booksApiMid.id
     envVars: [
