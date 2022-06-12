@@ -44,4 +44,47 @@ module cosmos 'modules/cosmos.bicep' = {
   }
 }
 
+module api 'modules/api.bicep' = {
+  name: 'api'
+  params: {
+    image: 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
+    name: 'books-api'
+    location: location
+    containerAppEnvironmentId: acaEnv.outputs.id
+    registry: '${acr.name}.azure.io'
+    midName: booksApiMid.name
+    midResourceId: booksApiMid.id
+    envVars: [
+      {
+        name: 'ASPNETCORE_ENVIRONMENT'
+        value: 'Development'
+      }
+      {
+        name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+        value: acaEnv.outputs.aiInstrumentationKey
+      }
+      {
+        name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+        value: acaEnv.outputs.aiConnectionString
+      }
+      {
+        name: 'RepositoryOptions__AccountEndpoint'
+        value: cosmos.outputs.cosmosDns
+      }
+      {
+        name: 'RepositoryOptions__DatabaseId'
+        value: 'managed-id-db'
+      }
+      {
+        name: 'RepositoryOptions__IsAutoResourceCreationIfNotExistsEnabled'
+        value: 'False'
+      }
+      {
+        name: 'AZURE_CLIENT_ID'
+        value: booksApiMid.properties.clientId
+      }
+    ]
+  }
+}
+
 output acrLoginServer string = acr.properties.loginServer

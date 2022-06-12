@@ -38,3 +38,7 @@ resource env 'Microsoft.App/managedEnvironments@2022-03-01' = {
     }
   }
 }
+
+output id string = env.id 
+output aiConnectionString string = appInsights.properties.ConnectionString
+output aiInstrumentationKey string = appInsights.properties.InstrumentationKey
